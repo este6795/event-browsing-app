@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Node (frontend React app)
+node_modules/
+build/
+dist/
+npm-debug.log
+yarn-error.log
+
+# OS / Editor junk
+.DS_Store
+.vscode/
+.idea/
