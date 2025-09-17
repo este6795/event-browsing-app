@@ -1,6 +1,8 @@
 """
 Test created using Github Copilot!!!!
 Prompt: Write unit tests for the userAccount.py file using unittest framework.
+
+To use please run: python3 -m unittest tests/test_userAccount.py
 """
 
 import unittest
