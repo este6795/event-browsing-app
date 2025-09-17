@@ -5,7 +5,7 @@ class User:
         self.username = username
         self.password = password
         self.email = email
-        self.users = {"Alex" : {"password": "password123", "email": None}}
+        self.users = {}
 
     def __repr__(self):
         return f"User(username={self.username}, password={self.password} ,email={self.email})"
