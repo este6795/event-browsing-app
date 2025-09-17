@@ -12,15 +12,12 @@ class User:
 
     def sign_up(self, username, password, email=None):
         # Logic for signing up a user
-        for user in self.users:
-            if user == username:
-                raise ValueError("Username already exists")
-            else: 
-                if len(password) <= 12: 
-                    raise ValueError("Password must be at least 12 characters long")
-                else: 
-                    self.users[username] = {"password": password, "email": email}
-                    return "User signed up successfully"
+        if username in self.users:
+            raise ValueError("Username already exists")
+        if len(password) <= 12:
+            raise ValueError("Password must be at least 12 characters long")
+        self.users[username] = {"password": password, "email": email}
+        return "User signed up successfully"
     
     def log_in(self, username, password):
         # Logic for logging in a user
@@ -50,15 +47,3 @@ class User:
         if username in self.users and self.users[username]["password"] == password and self.users[username]["email"] == email:
             del self.users[username]
             return "Account deleted successfully"
-
-
-
-
-# Testing 
-print("Hello welcome please sign up or log in")
-
-test_user = User(username="testuser", password="securepassword123", email="test@example.com")
-assert test_user.username == "testuser", "Username not set correctly"
-assert test_user.password == "securepassword123", "Password not set correctly"
-assert test_user.email == "test@example.com", "Email not set correctly"
-print("User creation test passed.")

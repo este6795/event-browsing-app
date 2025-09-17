@@ -11,6 +11,14 @@ from app.userAccount import User
 class TestUserAccount(unittest.TestCase):
     def setUp(self):
         self.user = User(username="testuser", password="securepassword123", email="test@example.com")
+    def test_users_dict_structure(self):
+        self.user.sign_up("user1", "passworduser1abcd", "user1@example.com")
+        self.user.sign_up("user2", "passworduser2abcd", "user2@example.com")
+        expected = {
+            "user1": {"password": "passworduser1abcd", "email": "user1@example.com"},
+            "user2": {"password": "passworduser2abcd", "email": "user2@example.com"}
+        }
+        self.assertEqual(self.user.users, expected)
 
     def test_sign_up_success(self):
         result = self.user.sign_up("newuser", "longpassword1234", "new@example.com")
@@ -18,8 +26,9 @@ class TestUserAccount(unittest.TestCase):
         self.assertIn("newuser", self.user.users)
 
     def test_sign_up_existing_username(self):
+        self.user.sign_up("user1", "passworduser1abcd", "user1@example.com")
         with self.assertRaises(ValueError):
-            self.user.sign_up("Alex", "anotherpassword1234")
+            self.user.sign_up("user1", "anotherpassword1234")
 
     def test_sign_up_short_password(self):
         with self.assertRaises(ValueError):
