@@ -13,10 +13,10 @@ class User:
     def sign_up(self, username, password, email=None):
         # Logic for signing up a user
         for user in self.users:
-            if user.username == username:
+            if user == username:
                 raise ValueError("Username already exists")
             else: 
-                if len(user.password) <= 12: 
+                if len(password) <= 12: 
                     raise ValueError("Password must be at least 12 characters long")
                 else: 
                     self.users[username] = {"password": password, "email": email}
