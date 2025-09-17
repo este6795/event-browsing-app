@@ -50,3 +50,15 @@ class User:
         if username in self.users and self.users[username]["password"] == password and self.users[username]["email"] == email:
             del self.users[username]
             return "Account deleted successfully"
+
+
+
+
+# Testing 
+print("Hello welcome please sign up or log in")
+
+test_user = User(username="testuser", password="securepassword123", email="test@example.com")
+assert test_user.username == "testuser", "Username not set correctly"
+assert test_user.password == "securepassword123", "Password not set correctly"
+assert test_user.email == "test@example.com", "Email not set correctly"
+print("User creation test passed.")
