@@ -25,6 +25,9 @@ class User:
         self.users = {}
 
     def __repr__(self):
+        """
+        Returns a string representation of the User object.
+        """
         return f"User(username={self.username}, password={self.password} ,email={self.email})"
 
     def sign_up(self, username, password, email=None):
@@ -53,7 +56,9 @@ class User:
             raise ValueError("Invalid username or password, please try again")
    
     def password_recovery(self, username, password, email=None):
-        # Logic for password recovery
+        """
+        Checks if user exists and updates their password.
+        """
         for user in self.users:
             if user.username == username and user.email == email:
                 user.password = password
