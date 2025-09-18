@@ -1,8 +1,17 @@
+"""
+userAccount.py
+User account management for an event browsing app
+Developed by Alex and Dean
 
-# userAccount.py
-# User account management for an event browsing app
-# Developed by Alex and Dean
 
+Requirements: 
+- Creating a user account with a unique username and password
+- Creating login in functionality
+- Password change/recovery 
+- Verifying emails are valid
+- Deleting user accounts 
+- Identifying and handling database related areas 
+"""
 
 class User:
     """
