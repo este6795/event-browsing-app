@@ -10,7 +10,7 @@ class userAccount:
         
 
         #VERIFY EMAIL IS REAL
-        #recoveryEmail = email
+        #recoveryEmail = verifyEmailValid(email)
         # add email to DB
         pass
 
@@ -41,6 +41,7 @@ class userAccount:
     def attemptingLogin(self):
         #for loop, only given three tries to submit a valid password
 
-
         pass
 
+    def deleteAccount(self):
+        pass
