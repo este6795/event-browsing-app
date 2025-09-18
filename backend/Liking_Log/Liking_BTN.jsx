@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
 
-function LikeButton() {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(0);
+//Users will need to change ID once we have it
+const currentUser = 'user123';
+const postCreater = 'user321';
 
-  const handleClick = () => {
-    if (liked) {
-      setLikes(prev => Math.max(prev - 1, 0));
-    }
-    else {
-      setLikes(prev => + 1);
-    }
+function LikeButton ({ creator }) {
+  const [likedUsers, setLikedUsers] = useState([]);
+  const [liked, setLiked] = useState(false);
+
+  const hadnleClick = () => {
     setLiked(prev => !prev);
+
+    setLikedUsers(prev => {
+      if (!iked) {
+        return [...prev, currentUser];
+      }
+      else {
+        return prev.filter(user => user !== currentUser);
+      }
+    });
   };
+  const isCreator = currentUser === creator;
 
   return (
-    <button onClick = {handleClick} style = {{ fontSize: '18px', padding: '10px 20px'}}>
-    </button>
+    <div>
+      <button onClick = {handleClick}>
+        {liked ? '💖 Liked': '🤍 Like'} ({likedUsers.length})
+      </button>
+
+      {isCreator && (
+        <div style={{ marginTop: '10px' }}>
+          <strong>Users who liked this:</strong>
+          <ul>
+            {likedUsers.map(user => (
+              <li key={user}>{user}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
-export default LikeButton; 
+
+//Usage
+export default function App() {
+  return <LikeButton creator={postCreator} />;
+} 
+
+
