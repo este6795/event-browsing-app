@@ -1,10 +1,15 @@
-#import SQLalchemy
+import sqlite3
+
+sqliteConnection = sqlite3.connet('EventPlannerDB.db')
+cursor = sqliteConnection.cursor()
 
 # NEED TO ASK HOW MUCH OF THIS LOGIC IS ALREADY GOING TO BE HANDLED BY THE FRONT END
 class userAccount:
     def __init__(self, user = None, userPass, email):
+        sql_command = """INSERT INTO accounts VALUES () """
         #username = verifyUsernameUnique(user)
         
+
         password = userPass
         # add password to DB
         
@@ -12,7 +17,8 @@ class userAccount:
         #VERIFY EMAIL IS REAL
         #recoveryEmail = verifyEmailValid(email)
         # add email to DB
-        pass
+        cursor.execute(sql_command)
+
 
     def verifyUsernameUnique(self, username):
         # VERIFY USERNAME IS UNIQUE
@@ -45,3 +51,7 @@ class userAccount:
 
     def deleteAccount(self):
         pass
+
+
+
+sqliteConnection.close()
