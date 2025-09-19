@@ -14,11 +14,17 @@ class userAccount:
         password = userPass
         # add password to DB
         
-
+        
         #VERIFY EMAIL IS REAL
         #recoveryEmail = verifyEmailValid(email)
         # add email to DB
         cursor.execute(sql_command)
+        sqliteConnection.commit()
+
+    def getAccountBearID(self):
+
+
+        return
 
 
     def verifyUsernameUnique(self, username):
@@ -31,14 +37,34 @@ class userAccount:
     
     def verifyEmailValid(self, email):
         #while loop until they submit a valid email
+
+        #OPTION A) run through a regex to that it has a valid format for a unco email
+
+
+
+
+        #OPTION B) send a verification email (dont think this is feasible, I think this needs a server to recieve the verification, and idk how to)
+
         pass
 
     def changePass(self, newPass):
         #assuming that it has already been verified that this is a valid password change
-        self.password = newPass
+        userID = getAccountBearID()
+
+        sql_command = """
+        UPDATE
+        SET
+        WHERE 
+        """
+
+
+
+        cursor.execute(sql_command)
+        sqliteConnection.commit()
 
     def changeEmail(self, newEmail):
         self.email = verifyEmailValid(newEmail)
+        sqliteConnection.commit()
 
 
     def getEncryptedPassHash(self):
@@ -52,7 +78,5 @@ class userAccount:
 
     def deleteAccount(self):
         pass
-
-
 
 sqliteConnection.close()
