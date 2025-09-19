@@ -1,4 +1,5 @@
 import sqlite3
+import re
 
 sqliteConnection = sqlite3.connet('EventPlannerDB.db')
 cursor = sqliteConnection.cursor()

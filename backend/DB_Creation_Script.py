@@ -7,19 +7,27 @@ cursor = sqliteConnection.cursor()
 #I was hoping to do the RSVPEvents and LikedEvents as a list, all I could find is BLOB, and 
 #idk how they work yet (growth mindset)
 #but we might just end up needing to treat it like a CSV and cry about it
+
 sql_command = """CREATE TABLE accounts (
 BearID INTEGER PRIMARY KEY, 
 username VARCHAR(20), 
 password VARCHAR (50), 
 recoveryEmail VARCHAR(60),     
 RSVPEvents MEDIUMBLOB,             
-LikedEvents MEDIUMBLOB);"""       
+LikedEvents MEDIUMBLOB
+
+CreatedEvents MEDIUMBLOB
+
+FOREIGN KEY (eventID) REFERNCES events
+
+;)"""       
 
 cursor.execute(sql_command)
 
 
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
+FOREIGN KEY (BearID) REFERENCES accounts, 
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
 images MEDIUMBLOB,                                        
@@ -29,7 +37,8 @@ startDateTime DATETIME NOT NULL,
 endDateTime DATETIME NOT NULL, 
 listOfUsersRSVPd MEDIUMBLOB, 
 numberOfLikes INTEGER(6),       
-listOfUsersLiked MEDIUMBLOB;"""
+listOfUsersLiked MEDIUMBLOB;)"""
+
 #I'm not sure if/how the AUTO_INC on eventID changes how we input data into the db 
 #eventDescription is only 250 characters, could increase if desired
 
