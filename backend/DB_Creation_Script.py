@@ -14,13 +14,8 @@ username VARCHAR(20),
 password VARCHAR (50), 
 recoveryEmail VARCHAR(60),     
 RSVPEvents MEDIUMBLOB,             
-LikedEvents MEDIUMBLOB
-
-CreatedEvents MEDIUMBLOB
-
-FOREIGN KEY (eventID) REFERNCES events
-
-;)"""       
+LikedEvents MEDIUMBLOB,
+CreatedEvents MEDIUMBLOB;)"""       
 
 cursor.execute(sql_command)
 

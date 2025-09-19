@@ -14,14 +14,14 @@ class userAccount:
         password = userPass
         # add password to DB
         
-        
+
         #VERIFY EMAIL IS REAL
         #recoveryEmail = verifyEmailValid(email)
         # add email to DB
         cursor.execute(sql_command)
         sqliteConnection.commit()
 
-    def getAccountBearID(self):
+    def getAccountsBearID(self):
 
 
         return
@@ -49,11 +49,11 @@ class userAccount:
 
     def changePass(self, newPass):
         #assuming that it has already been verified that this is a valid password change
-        userID = getAccountBearID()
+        userID = getAccountsBearID()
 
         sql_command = """
-        UPDATE
-        SET
+        UPDATE accounts
+        SET password = %f
         WHERE 
         """
 
