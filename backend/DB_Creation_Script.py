@@ -51,4 +51,5 @@ listOfUsersLiked MEDIUMBLOB;)"""
 #I think numberofLikes INTEGER(6) means that val has 6 digits, could be wrong
 
 cursor.execute(sql_command)
+sqliteConnection.commit()
 sqliteConnection.close()
