@@ -22,7 +22,9 @@ class userAccount:
         sqliteConnection.commit()
 
     def getAccountsBearID(self):
-
+        # NEED TO UPDATE ALL PLACES WHERE IT IS CALLED, 
+        # PROBABLY NEED TO ASK FRONTEND 
+        # HOW WE WILL KNOW THE ARE CONNECTED TO SERVER / USER IS LOGGED IN
 
         return
 
@@ -48,22 +50,29 @@ class userAccount:
         pass
 
     def changePass(self, newPass):
-        #assuming that it has already been verified that this is a valid password change
+        #assuming that it has already been verified that this is a valid password change attempt
         userID = getAccountsBearID()
 
-        sql_command = """
+        sql_command = f"""
         UPDATE accounts
-        SET password = %f
-        WHERE 
+        SET password = {newPass}
+        WHERE BearID = {userID}
         """
-
-
 
         cursor.execute(sql_command)
         sqliteConnection.commit()
 
     def changeEmail(self, newEmail):
-        self.email = verifyEmailValid(newEmail)
+        email = verifyEmailValid(newEmail)
+        userID = getAccountsBearID()
+
+        sql_command = f"""
+        UPDATE accounts
+        SET recoveryEmail = {email}
+        WHERE BearID = {userID}
+        """
+
+        cursor.execute(sql_command)
         sqliteConnection.commit()
 
 
