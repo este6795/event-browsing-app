@@ -1,13 +1,15 @@
-import sqlite3
-import re
+import sqlite3      # sql injection software
+import re           # regex for email verification
+import bcrypt       # encryption for password hash / secure login
+
 
 sqliteConnection = sqlite3.connet('EventPlannerDB.db')
 cursor = sqliteConnection.cursor()
 
 # NEED TO ASK HOW MUCH OF THIS LOGIC IS ALREADY GOING TO BE HANDLED BY THE FRONT END
 class userAccount:
-    def __init__(self, user = None, userPass, email):
-        sql_command = """INSERT INTO accounts VALUES () """
+    def __init__(self, BearID, username, userPass, email):
+        
         #username = verifyUsernameUnique(user)
         
 
@@ -16,14 +18,29 @@ class userAccount:
         
 
         #VERIFY EMAIL IS REAL
-        #recoveryEmail = verifyEmailValid(email)
-        # add email to DB
+        recoveryEmail = verifyEmailValid(email)
+
+
+
+        sql_command = f"""
+        INSERT INTO accounts VALUES (
+        {BearID}, 
+        {username}, 
+        {password}, 
+        {recoveryEmail},
+        {None},
+        {None},           
+        {None};
+        )"""
+        # last three are RSVPd events, Liked Events, and created events respectively 
+        # All are empty on account creation
+
         cursor.execute(sql_command)
         sqliteConnection.commit()
 
     def getAccountsBearID(self):
-        # NEED TO UPDATE ALL PLACES WHERE IT IS CALLED, 
-        # PROBABLY NEED TO ASK FRONTEND 
+        # WHEN FINISHED, NEED TO UPDATE ALL PLACES WHERE IT IS CALLED, 
+        # PROBABLY NEED TO ASK FRONT END 
         # HOW WE WILL KNOW THE ARE CONNECTED TO SERVER / USER IS LOGGED IN
 
         return
@@ -56,7 +73,7 @@ class userAccount:
         sql_command = f"""
         UPDATE accounts
         SET password = {newPass}
-        WHERE BearID = {userID}
+        WHERE BearID = {userID};
         """
 
         cursor.execute(sql_command)
@@ -69,21 +86,47 @@ class userAccount:
         sql_command = f"""
         UPDATE accounts
         SET recoveryEmail = {email}
-        WHERE BearID = {userID}
+        WHERE BearID = {userID};
         """
 
         cursor.execute(sql_command)
         sqliteConnection.commit()
 
 
-    def getEncryptedPassHash(self):
+    def getEncryptedPassHash(self, inputBearID):
         #used when logging in, to check user input password attempt against the stored password
-        pass
+        sql_command = f"""
+        SELECT password
+        FROM accounts
+        WHERE BearID = {inputBearID};
+        """
 
-    def attemptingLogin(self):
+        cursor.execute(sql_command)
+        password = cursor.fetchall()
+
+        salt = bcrypt.gensalt()
+
+        #hashed = bcrypt.hashpw(password, salt)
+        return bcrypt.hashpw(password, salt)
+        
+
+    def attemptingLogin(self, inputName, inputPass):
         #for loop, only given three tries to submit a valid password
+        #IS THIS MY JOB??
+        sql_command = f"""
+        SELECT BearID
+        FROM accounts
+        WHERE username = {inputName};
+        """
+        cursor.execute(sql_command)
+        BearID = cursor.fetchall()
 
-        pass
+        hashedPass = getEncryptedPassHash(BearID)
+
+        #NOT FINISHED, UNSURE IF I CAN SPLIT THIS INTO TWO METHODS. 
+        #MAY NEED TO EITHER PASS IN THE SALT, OR COMBINE WITH getPassHash
+
+        return #WTF DO I RETURN
 
     def deleteAccount(self):
         pass
