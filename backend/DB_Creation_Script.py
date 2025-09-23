@@ -34,6 +34,13 @@ listOfUsersRSVPd MEDIUMBLOB,
 numberOfLikes INTEGER(6),       
 listOfUsersLiked MEDIUMBLOB;)"""
 
+cursor.execute(sql_command)
+
+#("Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "", "", "", "", "", "", "", "")
+# Event Types - ("")
+# departments - ("Art", "Math", "Science", "Computer Science", "History", "Education", "Political Science", "Software Engineering", "Business")
+
+
 #I'm not sure if/how the AUTO_INC on eventID changes how we input data into the db 
 #eventDescription is only 250 characters, could increase if desired
 
@@ -50,6 +57,6 @@ listOfUsersLiked MEDIUMBLOB;)"""
 
 #I think numberofLikes INTEGER(6) means that val has 6 digits, could be wrong
 
-cursor.execute(sql_command)
+
 sqliteConnection.commit()
 sqliteConnection.close()
