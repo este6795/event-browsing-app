@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
 
-//Users will need to change ID once we have it
+// Users will need to change ID once we have it
 const currentUser = 'user123';
-const postCreater = 'user321';
+const postCreator = 'user321';
 
-function LikeButton ({ creator }) {
+function LikeButton({ creator }) {
+  // Use a single state to manage the liked users and infer the "liked" status from it.
   const [likedUsers, setLikedUsers] = useState([]);
-  const [liked, setLiked] = useState(false);
+  
+  const liked = likedUsers.includes(currentUser);
 
-  const hadnleClick = () => {
-    setLiked(prev => !prev);
-
+  const handleClick = () => {
     setLikedUsers(prev => {
-      if (!iked) {
-        return [...prev, currentUser];
-      }
-      else {
+      // Check if the current user is already in the array.
+      if (prev.includes(currentUser)) {
+        // If so, filter them out (unlike).
         return prev.filter(user => user !== currentUser);
+      } else {
+        return [...prev, currentUser];
       }
     });
   };
+
   const isCreator = currentUser === creator;
 
   return (
     <div>
-      <button onClick = {handleClick}>
-        {liked ? '💖 Liked': '🤍 Like'} ({likedUsers.length})
+      <button onClick={handleClick}>
+        {liked ? '👍 Liked' : '👍 Like'} ({likedUsers.length})
       </button>
 
       {isCreator && (
@@ -42,9 +44,7 @@ function LikeButton ({ creator }) {
   );
 }
 
-//Usage
+// Usage
 export default function App() {
   return <LikeButton creator={postCreator} />;
-} 
-
-
+}
