@@ -18,27 +18,24 @@ LikedEvents MEDIUMBLOB,
 CreatedEvents MEDIUMBLOB;)"""
 
 """
-RSVPEvents
-LikedEvents
-CreatedEvents
+FOREIGN KEY ( ) REFERENCES RSVPed_Events
+FOREIGN KEY ( ) REFERENCES LikedEvents
+FOREIGN KEY ( ) REFERENCES CreatedEvents
 
 
 
 """
-
-
-
 cursor.execute(sql_command)
 
 
-sql_command = f""" CREATE TABLE RSVPEvents (
+sql_command = f""" CREATE TABLE RSVPed_Events (
 FOREIGN KEY (EventID) REFERENCES events
 
 
 
 
 ;)"""
-
+cursor.execute(sql_command)
 
 
 
@@ -57,7 +54,26 @@ listOfUsersRSVPd MEDIUMBLOB,
 numberOfLikes INTEGER(6),       
 listOfUsersLiked MEDIUMBLOB;)"""
 
+
+"""
+FOREIGN KEY () 
+
+"""
+
+
 cursor.execute(sql_command)
+
+
+sql_command = f""" CREATE TABLE Event_UsersRSVPed (
+FOREIGN KEY (EventID) REFERENCES events
+
+
+
+
+;)"""
+cursor.execute(sql_command)
+
+
 
 #("Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "Competition", "", "", "", "", "", "", "")
 # Event Types - ("")
