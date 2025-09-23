@@ -8,6 +8,8 @@ cursor = sqliteConnection.cursor()
 #idk how they work yet (growth mindset)
 #but we might just end up needing to treat it like a CSV and cry about it
 
+
+#User Account Table Creation
 sql_command = """CREATE TABLE accounts (
 BearID INTEGER PRIMARY KEY, 
 username VARCHAR(20), 
@@ -25,6 +27,7 @@ FOREIGN KEY (eventID) REFERNCES events
 cursor.execute(sql_command)
 
 
+# Event Table Creation
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
 FOREIGN KEY (BearID) REFERENCES accounts, 

@@ -12,7 +12,9 @@ Requirements:
 - Deleting user accounts 
 - Identifying and handling database related areas 
 """
+import sqlite3, re
 
+DB_NAME = "EventPlannerDB.db"
 class User:
     """
     User account management for the event browsing app.
@@ -20,7 +22,7 @@ class User:
     This class manages user sign up, login, password recovery, profile updates, and account deletion.
     Users are stored in a multidimensional dictionary, where each username maps to a dictionary containing their password and email.
     """
-    def __init__(self, username, password, email=None):
+    def __init__(self, username:str, password:str, email=None):
         """
         Initialize a User object.
         Args:
@@ -31,7 +33,6 @@ class User:
         self.username = username
         self.password = password
         self.email = email
-        self.users = {}
 
     def __repr__(self):
         """
@@ -39,6 +40,47 @@ class User:
         """
         return f"User(username={self.username}, password={self.password} ,email={self.email})"
 
+    @staticmethod
+    def init_db():
+        """
+        A method that initializes the database and creates the accounts table if it doesn't exist.
+        """
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("""CREATE TABLE accounts (
+            BearID INTEGER PRIMARY KEY, 
+            username VARCHAR(20), 
+            password VARCHAR (50), 
+            recoveryEmail VARCHAR(60),     
+            RSVPEvents MEDIUMBLOB,             
+            LikedEvents MEDIUMBLOB,
+            CreatedEvents MEDIUMBLOB,
+
+            FOREIGN KEY (eventID) REFERNCES events
+
+            ;)""")
+        conn.commit()
+        conn.close()       
+
+    @staticmethod
+    def connect_db():
+        """
+        Connect to the SQLite database and return the connection object.
+        """
+        return sqlite3.connect(DB_NAME)
+
+    @staticmethod
+    def valid_email(email):
+        """
+        Validate the email format using a regular expression.
+        Returns True if the email is valid, False otherwise.
+        """
+        if email is None:
+            return False
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(email_regex, email) is not None
+
+    @classmethod
     def sign_up(self, username, password, email=None):
         """
         Sign up a new user.
@@ -53,6 +95,7 @@ class User:
         self.users[username] = {"password": password, "email": email}
         return "User signed up successfully"
     
+    @classmethod
     def log_in(self, username, password):
         """
         Log in a user.
@@ -64,6 +107,7 @@ class User:
         else:
             raise ValueError("Invalid username or password, please try again")
    
+    @classmethod
     def password_recovery(self, username, password, email=None):
         """
         Checks if user exists and updates their password.
@@ -85,6 +129,7 @@ class User:
         if new_password:
             self.password = new_password
    
+    @classmethod
     def delete_account(self, username, password, email=None):
         """
         Delete a user account from the users dictionary.
