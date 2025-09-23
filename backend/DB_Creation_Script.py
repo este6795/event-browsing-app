@@ -29,7 +29,9 @@ CreatedEvents MEDIUMBLOB;)"""
 
 cursor.execute(sql_command)
 
-
+# OPTION A)  This is a Log of RSVPs, which references both Event ID and 
+#            ?? Create logic to delete all rsvps of an event once the event is over?
+#                     ?? should we create logic to delete an event automatically 24-72 hours after its endDateTime?
 sql_command = f""" CREATE TABLE RSVPed_Events (
 FOREIGN KEY (EventID) REFERENCES events
 
