@@ -64,16 +64,6 @@ FOREIGN KEY ()
 cursor.execute(sql_command)
 
 
-sql_command = f""" CREATE TABLE Event_UsersRSVPed (
-FOREIGN KEY (EventID) REFERENCES events
-
-
-
-
-;)"""
-cursor.execute(sql_command)
-
-
 
 #("Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "Competition", "", "", "", "", "", "", "")
 # Event Types - ("")
