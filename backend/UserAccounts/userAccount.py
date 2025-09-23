@@ -51,6 +51,11 @@ class userAccount:
         # user inputs their email
         # call to database to check uniqueness
         # while loop until they submit a valid one
+
+
+        #?? need while loop to give any number of attempts to input a valid
+
+
         
         return
     
@@ -58,7 +63,7 @@ class userAccount:
         #while loop until they submit a valid email
 
         #OPTION A) run through a regex to that it has a valid format for a unco email
-
+        
 
 
 

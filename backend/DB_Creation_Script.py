@@ -10,19 +10,42 @@ cursor = sqliteConnection.cursor()
 
 sql_command = """CREATE TABLE accounts (
 BearID INTEGER PRIMARY KEY, 
-username VARCHAR(20), 
+username VARCHAR(20) UNIQUE,
 password VARCHAR (50), 
 recoveryEmail VARCHAR(60),     
 RSVPEvents MEDIUMBLOB,             
 LikedEvents MEDIUMBLOB,
-CreatedEvents MEDIUMBLOB;)"""       
+CreatedEvents MEDIUMBLOB;)"""
+
+"""
+RSVPEvents
+LikedEvents
+CreatedEvents
+
+
+
+"""
+
+
 
 cursor.execute(sql_command)
 
 
+sql_command = f""" CREATE TABLE RSVPEvents (
+FOREIGN KEY (EventID) REFERENCES events
+
+
+
+
+;)"""
+
+
+
+
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
-FOREIGN KEY (BearID) REFERENCES accounts, 
+FOREIGN KEY (BearID) REFERENCES accounts,
+creatorType ENUM ("Student", "Faculty"),
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
 images MEDIUMBLOB,                                        
@@ -36,7 +59,7 @@ listOfUsersLiked MEDIUMBLOB;)"""
 
 cursor.execute(sql_command)
 
-#("Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "", "", "", "", "", "", "", "")
+#("Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "Competition", "", "", "", "", "", "", "")
 # Event Types - ("")
 # departments - ("Art", "Math", "Science", "Computer Science", "History", "Education", "Political Science", "Software Engineering", "Business")
 
