@@ -148,7 +148,7 @@ class User:
 
         #Update the password for the user if username and email match
         cursor.execute("UPDATE accounts SET password = ? WHERE username = ? AND recoveryEmail = ?", (new_password, username, email))
-        cursor.commit()
+        conn.commit()
         update = cursor.rowcount
         conn.close()
 

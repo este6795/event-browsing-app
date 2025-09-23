@@ -116,6 +116,38 @@ class TestUserAccount(unittest.TestCase):
         self.assertEqual(row[1], "newstrongpassword456")
         self.assertEqual(row[2], "eve2@example.com")
 
+    def password_update_and_too_short_raise(self):
+        username = "eve"
+        password = "evestrongpassword123"
+        email = "eve@example.com"
+        User.sign_up(username, password, email)
+
+        #Create an instance where we can update the password
+        u = User(username=username, password=password, email=email) 
+        u.password_recovery(new_password="newpassword123", email=email)
+        self.assertEqual(u.password, "newpassword123")
+        self.assertEqual(u.email, "eve@example.com")
+
+        # Verify DB updated
+        row = self._get_user_row(username)
+        self.assertEqual(row[1], "newpassword123")
+        self.assertEqual(row[2], "eve@example.com")
+
+        # Too short password should raise
+        with self.assertRaises(ValueError):
+            u.password_recovery(new_password="short", email=email)
+
+        # Invalid email should raise
+        with self.assertRaises(ValueError):
+            u.password_recovery(new_password="anothernewpassword123", email="invalid-email")
+
+        # Non-matching username/email should raise
+        with self.assertRaises(ValueError):
+            u.password_recovery(new_password="anothernewpassword123", email="notEmail@example.com")
+        with self.assertRaises(ValueError):
+            u.password_recovery(username="notUser", new_password="anothernewpassword123", email="eve@example.com")
+
+
     def test_delete_account_success_and_not_found(self):
         User.sign_up("frank", "frankspassword12345", "frank@example.com")
         result = User.delete_account("frank", "frankspassword12345", "frank@example.com")
