@@ -17,29 +17,28 @@ cursor = sqliteConnection.cursor()
 #but we might just end up needing to treat it like a CSV and cry about it
 
 sql_command = """CREATE TABLE accounts (
-BearID INTEGER PRIMARY KEY, 
+accountID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 username VARCHAR(20) UNIQUE,
+accountType ENUM ("Student", "Faculty")
 password VARCHAR (50), 
 recoveryEmail VARCHAR(60),     
 RSVPEvents MEDIUMBLOB,             
 LikedEvents INTEGER (5),
 CreatedEvents MEDIUMBLOB;)"""
 
-"""
-FOREIGN KEY ( ) REFERENCES RSVPed_Events
-FOREIGN KEY ( ) REFERENCES LikedEvents
-FOREIGN KEY ( ) REFERENCES CreatedEvents
 
-
-
-"""
 cursor.execute(sql_command)
 
 
 sql_command = f""" CREATE TABLE RSVPed_Events (
 FOREIGN KEY (EventID) REFERENCES events
 
+includes event id - is referenced from events
+includes creator id - accounts references this?
 
+
+?????creates a new line per rsvp 
+#
 
 
 ;)"""
@@ -49,8 +48,8 @@ cursor.execute(sql_command)
 
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
-FOREIGN KEY (BearID) REFERENCES accounts,
-creatorType ENUM ("Student", "Faculty"),
+FOREIGN KEY (accountID) REFERENCES accounts,
+FOREIGN KEY (accountType) REFERENCES accounts
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
 images MEDIUMBLOB,                                        
@@ -59,9 +58,9 @@ eventAccess ENUM ("Public", "Private"),
 startDateTime DATETIME NOT NULL, 
 endDateTime DATETIME NOT NULL, 
 listOfUsersRSVPd MEDIUMBLOB, 
-numberOfLikes INTEGER(6),       
-listOfUsersLiked MEDIUMBLOB;)"""
+numberOfLikes INTEGER(5);)"""
 
+# We've cut 
 
 """
 FOREIGN KEY () 
