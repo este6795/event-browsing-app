@@ -12,7 +12,7 @@ Requirements:
 - Deleting user accounts 
 - Identifying and handling database related areas 
 """
-import sqlite3, re
+import sqlite3, re, hashlib
 
 DB_NAME = "EventPlannerDB.db"
 class User:
@@ -63,7 +63,7 @@ class User:
         conn.close()       
 
     @staticmethod
-    def connect_db():
+    def connect():
         """
         Connect to the SQLite database and return the connection object.
         """
@@ -81,61 +81,125 @@ class User:
         return re.match(email_regex, email) is not None
 
     @classmethod
-    def sign_up(self, username, password, email=None):
+    def sign_up(cls, username, password, email=None):
         """
         Sign up a new user.
         Takes a username, password, and optionally an email. Checks if the username is unique and if the password is long enough (at least 13 characters).
         Adds the user to the users dictionary if valid.
         Returns a success message or raises ValueError if checks fail.
         """
-        if username in self.users:
-            raise ValueError("Username already exists")
+        conn = cls.connect()
+        cursor = conn.cursor()
+
+        # Password and email validation
         if len(password) <= 12:
             raise ValueError("Password must be at least 12 characters long")
-        self.users[username] = {"password": password, "email": email}
-        return "User signed up successfully"
-    
+        if not cls.valid_email(email):
+            raise ValueError("Invalid email format")
+        
+        # Check for unique username in the database
+        cursor.execute("SELECT 1 FROM accounts WHERE username = ?", (username,))
+        if cursor.fetchone():
+            raise ValueError("Username already exists, please choose another")
+        
+        # Insert new user into the database
+        cursor.execute(
+            "INSERT INTO accounts (username, password, recoveryEmail) VALUES (?, ?, ?)", 
+                       (username, password, email),
+                       )
+        conn.commit()
+        conn.close()
+        
     @classmethod
-    def log_in(self, username, password):
+    def log_in(cls, username, password):
         """
         Log in a user.
-        Checks if the username and password match an entry in the users dictionary.
+        Checks if the username and password match an entry in the accounts database.
         Returns a success message or raises ValueError if credentials are invalid.
         """
-        if username in self.users and self.users[username]["password"] == password:
+        conn = cls.connect()
+        cursor = conn.cursor()
+
+        #Find the account in the database
+        cursor.execute("SELECT * FROM accounts WHERE username = ? AND password = ?", (username, password))
+        user = cursor.fetchone()
+        conn.close()
+        
+        #If the user exists, return success message
+        if user:
             return "Login successful"
         else:
-            raise ValueError("Invalid username or password, please try again")
-   
-    @classmethod
-    def password_recovery(self, username, password, email=None):
-        """
-        Checks if user exists and updates their password.
-        """
-        for user in self.users:
-            if user.username == username and user.email == email:
-                user.password = password
-                return "Password updated successfully"
-            else:
-                raise ValueError("Invalid username or email")
+            raise ValueError("Invalid username or password")
         
+    @classmethod
+    def password_recovery(cls, username, new_password, email=None):
+        """
+        Checks if user exists in the database with matching username and email.
+        If so, updates the password to the new password provided.
+        """
+        # Password and email validation
+        if len(new_password) <= 12:
+            raise ValueError("Password must be at least 12 characters long")
+        if not cls.valid_email(email):
+            raise ValueError("Invalid email format")
+        
+        conn = cls.connect()
+        cursor = conn.cursor()
+
+        #Update the password for the user if username and email match
+        cursor.execute("UPDATE accounts SET password = ? WHERE username = ? AND recoveryEmail = ?", (new_password, username, email))
+        cursor.commit()
+        update = cursor.rowcount
+        conn.close()
+
+        if update:
+            return "Password updated successfully"
+        else:
+            raise ValueError("Username and email do not match any account")
+
     def update_profile(self, new_email=None, new_password=None):
         """
         Update the profile of the current user instance.
-        Allows changing the email and/or password for this user object (not the users dictionary).
+        Allows changing the email and/or password for this user object as well as database.
         """
+        conn = self.connect()
+        cursor = conn.cursor()
+        
+        # Email validation and database update
         if new_email:
+            if not self.valid_email(new_email):
+                raise ValueError("Invalid email format")
+            cursor.execute("UPDATE accounts SET recoveryEmail = ? WHERE username = ?", (new_email, self.username))
             self.email = new_email
+
+        # Password validation and database update
         if new_password:
+            if len(new_password) <= 12:
+                raise ValueError("Password must be at least 12 characters long")
+            cursor.execute("UPDATE accounts SET password = ? WHERE username = ?", (new_password, self.username))
             self.password = new_password
-   
+        
+        conn.commit()
+        conn.close()
+                
     @classmethod
-    def delete_account(self, username, password, email=None):
+    def delete_account(cls, username, password, email=None):
         """
-        Delete a user account from the users dictionary.
+        Delete a user account from the account database.
         Checks if the username, password, and email match, then removes the user.
         Returns a success message if deleted.
         """
-        if username in self.users and self.users[username]["password"] == password and self.users[username]["email"] == email:
-            del self.users[username]
+        conn = cls.connect()
+        cursor = conn.cursor()
+
+        # Delete the user if username, password, and email match
+        cursor.execute("DELETE FROM accounts WHERE username = ? AND password = ? AND recoveryEmail = ?", (username, password, email))
+        conn.commit()
+        deleted = cursor.rowcount
+        conn.close()
+
+        if deleted:
             return "Account deleted successfully"
+        else:
+            raise ValueError("Username, password, and email do not match any account")
+        
