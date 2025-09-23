@@ -3,6 +3,14 @@ import sqlite3
 sqliteConnection = sqlite3.connect("EventPlannerDB.db")
 cursor = sqliteConnection.cursor()
 
+#========================================================================================
+# SqlLite  methods
+# to create a query, create a multiline string with """  args """
+# 
+
+
+
+#=========================================================================================
 #This script is just for making the table, logic like email authentication will be elsewhere
 #I was hoping to do the RSVPEvents and LikedEvents as a list, all I could find is BLOB, and 
 #idk how they work yet (growth mindset)
@@ -14,7 +22,7 @@ username VARCHAR(20) UNIQUE,
 password VARCHAR (50), 
 recoveryEmail VARCHAR(60),     
 RSVPEvents MEDIUMBLOB,             
-LikedEvents MEDIUMBLOB,
+LikedEvents INTEGER (5),
 CreatedEvents MEDIUMBLOB;)"""
 
 """
