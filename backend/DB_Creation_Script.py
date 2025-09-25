@@ -32,10 +32,10 @@ recoveryEmail VARCHAR(60),
 LikedEvents INTEGER
 );
 
+
 CREATE TABLE events (
-eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
+eventID INTEGER PRIMARY KEY,     
 creatorID INTEGER, 
-creatorType ENUM("Student", "Faculty"),
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
 images MEDIUMBLOB,
@@ -45,10 +45,8 @@ startDateTime DATETIME NOT NULL,
 endDateTime DATETIME NOT NULL, 
 numberOfLikes INTEGER,
 
-FOREIGN KEY (creatorID) REFERENCES accounts(accountID),
-FOREIGN KEY (creatorType) REFERENCES accounts(accountType)
+FOREIGN KEY (creatorID) REFERENCES accounts(accountID)
 );
-
 
 CREATE TABLE RSVPed_Events ( 
 rsvpID INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -57,7 +55,7 @@ creatorID INTEGER NOT NULL,
 userWhoRSVPID INTEGER NOT NULL,
 
 FOREIGN KEY (eventID) REFERENCES events(eventID),
-FOREIGN KEY (creatorID) REFERENCES events(accountID),
+FOREIGN KEY (creatorID) REFERENCES events(creatorID),
 FOREIGN KEY (userWhoRSVPID) REFERENCES accounts(accountID)
 );"""
 
