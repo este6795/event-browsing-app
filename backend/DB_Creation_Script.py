@@ -7,10 +7,32 @@ cursor = sqliteConnection.cursor()
 # SqlLite  methods
 # to create a query, create a multiline string with """  args """
 # 
-
+# Initializing is shown above, and just like filereading in java, I think you can name
+# sqlliteconnection and cursor anything, so long as its consistent.
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
 
 
 #=========================================================================================
+sql_command = """
+CREATE DATABASE eventPlanner;
+USE eventPlanner;
+"""
+cursor.execute(sql_command)
+
+
+
 #This script is just for making the table, logic like email authentication will be elsewhere
 #I was hoping to do the RSVPEvents and LikedEvents as a list, all I could find is BLOB, and 
 #idk how they work yet (growth mindset)
@@ -19,15 +41,15 @@ cursor = sqliteConnection.cursor()
 sql_command = """CREATE TABLE accounts (
 accountID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 username VARCHAR(20) UNIQUE,
-accountType ENUM ("Student", "Faculty")
+accountType ENUM ("Student", "Faculty"),
 password VARCHAR (50), 
-recoveryEmail VARCHAR(60),     
-RSVPEvents MEDIUMBLOB,             
-LikedEvents INTEGER (5),
-CreatedEvents MEDIUMBLOB;)"""
+recoveryEmail VARCHAR(60),
+LikedEvents INTEGER (5);"""
 
 cursor.execute(sql_command)
 
+# RSVP'd events and Liked Events are things we can query up, 
+# and are no longer attempting to make part of the table
 
 
 
@@ -44,8 +66,8 @@ userWhoRSVPID (10) NOT NULL,
 
 FOREIGN KEY (eventID) REFERENCES events,
 FOREIGN KEY (creatorID) REFERENCES events(accountID),
-FOREIGN KEY (userWhoRSVPID) REFERENCES accounts(accountID);
-)"""
+FOREIGN KEY (userWhoRSVPID) REFERENCES accounts(accountID)
+);"""
 cursor.execute(sql_command)
 
 
@@ -55,20 +77,19 @@ cursor.execute(sql_command)
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
 accountID INTEGER (10), 
-accountType ENUM 
+accountType ENUM  ("Student", "Faculty"),
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
-images MEDIUMBLOB,                                        
-eventType SET ("Sports","Honors", "Workshops", "Study Session"),    
+images MEDIUMBLOB,
+eventType SET ("Art", "Math", "Science", "Computer Science", "History", "Education", "Political Science", "Software Engineering", "Business","Sports","Honors", "Workshops", "Study Session", "Dissertation", "Performance", "Competition"),    
 eventAccess ENUM ("Public", "Private"), 
 startDateTime DATETIME NOT NULL, 
 endDateTime DATETIME NOT NULL, 
-listOfUsersRSVPd MEDIUMBLOB, 
 numberOfLikes INTEGER(5),
 
 FOREIGN KEY (accountID) REFERENCES accounts,
 FOREIGN KEY (accountType) REFERENCES accounts
-)"""
+);"""
 
 
 
