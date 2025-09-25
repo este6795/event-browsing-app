@@ -26,32 +26,36 @@ RSVPEvents MEDIUMBLOB,
 LikedEvents INTEGER (5),
 CreatedEvents MEDIUMBLOB;)"""
 
-
 cursor.execute(sql_command)
+
+
+
+
+
 
 # OPTION A)  This is a Log of RSVPs, which references both Event ID and 
 #            ?? Create logic to delete all rsvps of an event once the event is over?
 #                     ?? should we create logic to delete an event automatically 24-72 hours after its endDateTime?
-sql_command = f""" CREATE TABLE RSVPed_Events (
-FOREIGN KEY (EventID) REFERENCES events
+#            PRIMARY KEY is (eventID, userWhoRSVPID), there is no singular candidate key
+sql_command = """ CREATE TABLE RSVPed_Events ( 
+eventID INTEGER (10) NOT NULL,
+creatorID (10) NOT NULL,
+userWhoRSVPID (10) NOT NULL,
 
-includes event id - is referenced from events
-includes creator id - accounts references this?
-
-
-?????creates a new line per rsvp 
-#
-
-
-;)"""
+FOREIGN KEY (eventID) REFERENCES events,
+FOREIGN KEY (creatorID) REFERENCES events(accountID),
+FOREIGN KEY (userWhoRSVPID) REFERENCES accounts(accountID);
+)"""
 cursor.execute(sql_command)
+
+
 
 
 
 sql_command = """CREATE TABLE events (
 eventID INTEGER PRIMARY KEY AUTO_INCREMENT,     
-FOREIGN KEY (accountID) REFERENCES accounts,
-FOREIGN KEY (accountType) REFERENCES accounts
+accountID INTEGER (10), 
+accountType ENUM 
 eventName VARCHAR(50) NOT NULL, 
 eventDescription VARCHAR(250) NOT NULL,         
 images MEDIUMBLOB,                                        
@@ -60,14 +64,12 @@ eventAccess ENUM ("Public", "Private"),
 startDateTime DATETIME NOT NULL, 
 endDateTime DATETIME NOT NULL, 
 listOfUsersRSVPd MEDIUMBLOB, 
-numberOfLikes INTEGER(5);)"""
+numberOfLikes INTEGER(5),
 
-# We've cut 
+FOREIGN KEY (accountID) REFERENCES accounts,
+FOREIGN KEY (accountType) REFERENCES accounts
+)"""
 
-"""
-FOREIGN KEY () 
-
-"""
 
 
 cursor.execute(sql_command)
