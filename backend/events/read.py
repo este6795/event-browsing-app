@@ -1,5 +1,6 @@
 import sqlite3
 
+## TESTING PURPOSES ONLY ##
 def create():
     ## TEMP
     import gpt_create
@@ -18,7 +19,23 @@ def create():
         numberOfLikes=0,
         listOfUsersLiked=b'',
     )
+
+    gpt_create.create_event(
+        BearID=1,
+        creatorType="Student",
+        eventName="Coding Workshop",
+        eventDescription="Learn Python basics!",
+        images=None,  # You can pass raw bytes for images
+        eventType="Workshops",
+        eventAccess="Public",
+        startDateTime="2025-10-01 10:00:00",
+        endDateTime="2025-10-01 12:00:00",
+        listOfUsersRSVPd=None,
+        numberOfLikes=0,
+        listOfUsersLiked=None,
+    )
     ## TEMP
+## ^^^ TESTING PURPOSES ONLY ^^^ ##
 
 # Connect to the SQLite database
 # If the file does not exist, it will be created automatically
