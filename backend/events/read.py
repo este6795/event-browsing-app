@@ -1,5 +1,25 @@
 import sqlite3
 
+def create():
+    ## TEMP
+    import gpt_create
+
+    gpt_create.create_event(
+        BearID=1,
+        creatorType="Student",
+        eventName="Sample Event",
+        eventDescription="This is a sample event description.",
+        images=b'',
+        eventType="Workshops",
+        eventAccess="Public",
+        startDateTime="2024-10-01 10:00:00",
+        endDateTime="2024-10-01 12:00:00",
+        listOfUsersRSVPd=b'',
+        numberOfLikes=0,
+        listOfUsersLiked=b'',
+    )
+    ## TEMP
+
 # Connect to the SQLite database
 # If the file does not exist, it will be created automatically
 sqliteConnection = sqlite3.connect("EventPlannerDB.db")
@@ -27,4 +47,26 @@ def read_events():
     return events
 
 
+def read_event_by_id(event_id: int):
+    """
+    Reads a specific event record from the events table by eventID.
+    Returns a tuple representing the event record, or None if not found.
+    """
+
+    # SQL query to select a specific record from the events table by eventID
+    sql_command = "SELECT * FROM events WHERE eventID = ?"
+
+    # Execute the query with the provided event_id
+    cursor.execute(sql_command, (event_id,))
+
+    # Fetch the result from the executed query
+    event = cursor.fetchone()
+
+    return event
+
+
+#create()
 print(read_events())
+print(read_event_by_id(1))
+
+sqliteConnection.close()
